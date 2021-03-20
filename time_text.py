@@ -1,4 +1,5 @@
 import statistics
+import datetime
 
 #make_time call_time spend_days send_who_catch send_hour_catch send_min_catch
 
@@ -205,15 +206,32 @@ def spend_days(day_list):
     return sum_day
 
 
+def text_user(data_line):
+    tmp=data_line.split("\t")
+    if len(tmp)==3:       
+        tm_user=tmp[1]
+        return tm_user
+    else:
+        return ""
+
+
+
 
 
         
 def analysis(txt_file,user1,user2):
+
+    dt_1=0
+    dt_2=0
+    flag=0
+    
+
    
     flag=0
     
     list_tmp_time=["(",")","\n"]
     list_weekday=["月","火","水","木","金","土","日"]
+
     list_day=[]
     listc_user1=["user1"]
     listc_user2=["user2"]
@@ -248,11 +266,107 @@ def analysis(txt_file,user1,user2):
     time_diff_all=[]
     message_count=0
     day_list=[]
+
+
     tmp_day_list=[]
+
     zero_list_user1=[]  #一分を誤差としようかな
     zero_list_user2=[]
     time_diff_user1=[]
     time_diff_user2=[]
+
+    tmp_time=[]
+    while flag!=1:             #txtfile内を探っている
+        data_line=f.readline()
+            
+        if data_line!="":
+            tm_user=text_user(data_line)
+            hour=send_hour_catch(data_line)
+            minuites=send_min_catch(data_line)
+            time=make_time(data_line)
+            if time=="" and hour!="" and minuites!="":
+                tmp_time.append(hour)
+                tmp_time.append(minuites)
+                tmp_time.append(0)
+                day_list.append(tmp_time)
+                if user1==tm_user:
+                    
+                    if len(day_list)==1:
+                        flag_talk_change=0
+                    
+                    if flag_talk_change==0:
+                        dt_1=datetime.datetime(day_list[-1][0],day_list[-1][1],day_list[-1][2],day_list[-1][3],day_list[-1][4],day_list[-1][5])
+                        #print(dt_1)
+                        
+                    elif flag_talk_change==1:
+                        dt_1=datetime.datetime(day_list[-1][0],day_list[-1][1],day_list[-1][2],day_list[-1][3],day_list[-1][4],day_list[-1][5])
+                        if type(dt_1) is datetime.datetime and type(dt_2) is datetime.datetime:
+                            time_diff_all.append(round((dt_1-dt_2).total_seconds()/3600,2)) 
+                            
+                            #user1がプラスでuser2がマイナス
+                            if abs(round((dt_1-dt_2).total_seconds()/3600,2))==0.0:
+                                zero_list_user1.append(0)
+                            flag_talk_change=0            
+                else:
+                    if flag_talk_change==0:
+                        dt_2=datetime.datetime(day_list[-1][0],day_list[-1][1],day_list[-1][2],day_list[-1][3],day_list[-1][4],day_list[-1][5])
+                        #print(dt_2)
+                        if type(dt_1) is datetime.datetime and type(dt_2) is datetime.datetime:
+                            time_diff_all.append((round((dt_1-dt_2).total_seconds()/3600,2)))  #user1がプラスでuser2がマイナス
+                            if abs(round((dt_1-dt_2).total_seconds()/3600,2))==0.0:
+                                zero_list_user2.append(0)
+                        flag_talk_change=1
+                        
+                    elif flag_talk_change==1:
+                        dt_2=datetime.datetime(day_list[-1][0],day_list[-1][1],day_list[-1][2],day_list[-1][3],day_list[-1][4],day_list[-1][5])
+                        
+                    if len(day_list)==1:
+                        flag_talk_change=1
+                        
+                del tmp_time[3:6]
+    
+            
+            elif time!="":
+                tmp_time=time
+                #print(tmp_time)
+    
+            call_time1=call_time(data_line)
+            if str(call_time1)!="":
+                time_list.append(call_time1)
+                
+
+            #print(dicta)
+        else:
+            flag=1
+    
+    talk_start=datetime.datetime(day_list[0][0],day_list[0][1],day_list[0][2])
+    talk_end=datetime.datetime(day_list[-1][0],day_list[-1][1],day_list[-1][2])
+    talk_span=str((talk_end-talk_start).days)
+    tmp=[[str(day_list[i][j]) for j in range(3)] for i in range(len(day_list))]
+    tmp1=sum(tmp,[])
+    tmp2=list(((tmp1[i]+"年")+(tmp1[i+1]+"月")+(tmp1[i+2]+"日")) for i in range(0,len(tmp1),3))
+    tmp3=list(sorted(set(tmp2)))
+    talk_day=str(len(tmp3))
+    list_day_user1=list(filter(lambda x:x<0 ,time_diff_all))
+    list_day_user2=list(filter(lambda x:x>0 ,time_diff_all))
+    user1_reply=round(float(-min(list_day_user1)/24),0)
+    user2_reply=round(float(max(list_day_user2)/24),0)
+    reply_time_max=0
+    if user1_reply>user2_reply:
+        reply_time_max=user1_reply
+    else:
+        reply_time_max=user2_reply
+        
+    result1=str(round(float(statistics.mean(time_diff_all)),1))+"日"#平均返信時間二人とも、大幅にずれていなければよいかも？。
+    result2=str(statistics.median(time_diff_all))+"日" #中央値がマイナスならuser1に傾いていて、user2はプラスに傾いている場合。？ 
+    result3=str(statistics.mode(time_diff_all))+"日" #応答最頻
+    result4=str(reply_time_max)+"日" #user1とuser2の応答時間最大値
+    result5=str(zero_list_user1.count(0))+"回" #user1即レス
+    result6=str(zero_list_user2.count(0))+"回" #user2即レス
+    result7=str(message_count)+"回" #総メッセージ数
+    result8=str(round(sum(time_list),1))+"時間" #通話時間全体
+    result9=tmp3[0]+"～"+tmp3[-1]+"の"+talk_span+"日中"+talk_day+"話している" #期間と会話実行日数を表示したい。
+=======
     c=0
     while flag!=1:             #txtfile内を探っている
         data_line=f.readline()
@@ -331,6 +445,6 @@ def analysis(txt_file,user1,user2):
     result7=str(zero_list_user2.count(0))+"回" #user2即レス
     result8=str(message_count)+"回" #総メッセージ数
     result9=str(round(sum(time_list),1))+"時間" #通話時間全体
-    
+
     return(result1,result2,result3,result4,result5,result6,result7,result8,result9)
    
