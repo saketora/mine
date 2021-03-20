@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "mippyproject",
+  "private_key_id": "f6705c14e4eb375e5a53f5a0d92eae8403b4107c",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCp7WV/uIFl8WFU\njLfofLUNh+Aro/yJe3tC/Yoh9x6ktQoWNXzTlfP9Q1FsCtRkku19OgxkgtsiogF+\nOE1B/abI9YIWtuDeD5+VJiEnbbmTKH5AvmpTjZP5Q7Uoi8utyRzE4BUW5u7HEJzX\nJmlWSkBH8j2YdxLzuK7EkW+bZXp7GzdyPEFyOiRmbGfCFPDi0XbtX3IseAkUux+3\nbglYgM/cFq4MmaNro+Jh0ZW/YqniqTKN+nb7cssnFqkicN6zT8Mz1tbC9gN1sXVD\nXw6iKScgAW/lXdG/tgUd7PmVs9bE+KiJ7A6Sv4WcEvobbTvwwchYxwG+IPhEZsAK\nufauPw2bAgMBAAECggEANc7bG5kAvJe1QtE2cTOAH3M9vIP2dVB5JSrk4UF/3hcH\nxSWVy+hJdRKqh0RcoiZWdpd5kiBPpMVZJK9OY42fETaQxYGObjLTTSbgS7x2jY8+\nf2DsiV2lFELo7BhsXDD5X6w3cWOaC8YKbCSZKX5koYOnFo7qHOwHx23oQfRd1vov\nm6LqGZcfsTf1OvLEzBy7Sq7zKXs9qlf+Pv+hdW2BrsHOEg2MunJ/kNd/Jjelt5x5\nA1h+37ddb65pg64+AqgoGIKUAHZrOWoV9WDPrcQ/j0KxjjTCP/gdYqIt1Om7TMBn\nyq1S+CNpESdOPfLJa6hCRXuS+/zP4Z6SqTDxSwSECQKBgQDtlOtO2pblg8EhbN1D\ncqVFyZzXAgedWYbtln4/lMLt0Nw3m/udeNNEdEtMexlzkloM7i2OSyHESmOFqoR9\ndmVeLAglk8HzdL2/tHaxbBNwMvLzAcW0l36iH7BW2syUkqlGnudrOSMlZEq/eXZs\nPuGnZG7yMHFus2jv0biDo2WZCQKBgQC3Gcx1IWCN8qqzpfY+uz+SoY1apmpvpZh9\nzy0UU/kbKW09O+3oJSR2runBrKmICR3WyCN6tKsKKuR6xj2XM9Jvbwm07YWkuISl\nE/V+s8HgQdgSCXrcJO/Kh/dKP/6D5cUKmpF/32BShKRugHjNVUx+dqfhX5bOOoer\nWousRNlOgwKBgQCiHP6fdNqIS+oJ0837SwxpXVQPBkyJ2uAN2KXW3rxQKDdMHryH\nTD3ktPH4gvrv+IpHznH5aVzmIthcCemT7qjmpGb+tR8f76XWXN6s3BE7exh6Jthw\nDPuUxsi9y1jTfGvTS3SfnoJT7mZu1wOugw3Y+dgWnGWaYwOUuOcNs/4MeQKBgGD1\nOF+OHSMNrXcUGyF85l0vTzsBhLs6ZVW5r5VkIjVP6pjSc1jK0lRGq2HznJJ8wWBK\n+v6vTSNFM1gQQe0fc/+uPOWiIXLogtUnjIhbh/7I3zIt8vFAXfpRpZGb8ZrGwWCs\nGQAtuUP5GVmqjk2tLaSKELw3chQiylTizbObgbchAoGBANnYB+27IF2MzZFTS523\nsf3SOkC7n3vYPnyBBLSVYvVR47HJVLwLlDZaCtq4X+xhBmMV/rvdPobsik6Wh5tL\nW7exkc5e7s1J+u7qBQXxJV9Qnqwm5bbBakXWUGzBBryvx/AclTH1Fh4rH5caCvgz\nQqapfpwlIHYikadodJwaHxWp\n-----END PRIVATE KEY-----\n",
+  "client_email": "id-577@mippyproject.iam.gserviceaccount.com",
+  "client_id": "104681038292034039283",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/id-577%40mippyproject.iam.gserviceaccount.com"
+}

@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% block body %}
+<div class="cover">
+<h1>あなたと友達の相性は・・・25%</h1>
+<h2 calss="blank2"></h2>
+<p>.</p>
+<p>.</p>
+<p>.</p>
+<h1>あなたと友達はまだLINE上では親しい間柄ではないのかも、もしかしたら用があるときだけ連絡をするタイプじゃないですか？？
+{% if re11-re21>40 %}
+友達のほうがあなたのことを気にかけているようです。あなたも友達のことをもっと気にかけてもいかもしれません。
+{% endif %}
+{% if re11-re21<-40 %}
+あなたのほうが友達のことを気にかけているようです。友達が自分のことをどう思っているのか考えたほうがいいかもしれません
+{% endif %}
+</h1>
+<h1>時にはLINEで話をしてみるのも友達の新たな一面が見られて面白いかもしれませんよ。もっと会話を楽しもう！</h1>
+<h2 class="blank2"></h2>
+</div>
+<h2 class="blank2"></h2>
+   <canvas id="myRaderChart"></canvas>
+  <!-- CDN -->
+　<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
+
+  <script>
+    var ctx = document.getElementById("myRaderChart");
+    var myRadarChart = new Chart(ctx, {
+        type: 'radar', 
+        data: { 
+            labels: ["喜び😆", "好き😍", "悲しみ😥", "恐怖😫", "怒り💢"],           
+            datasets: [{
+                label: '{{uname1}}さん',
+                data: [{{re16*2}}, {{re18*8}}, {{re15*16}}, {{re17*16}}, {{re14*4}}],
+                backgroundColor: 'RGBA(140,255,101, 0.5)',
+                fontSize: 50,
+                borderColor: 'RGBA(25,101,0, 1)',
+                borderWidth: 4,
+                pointBackgroundColor: 'RGB(46,106,177)'
+            }, {
+                label: '{{uname2}}さん',
+                data: [{{re26*2}}, {{re28*8}}, {{re25*16}}, {{re27*16}}, {{re24*4}}],
+                backgroundColor: 'RGBA(255,101,255, 0.5)',
+                borderColor: 'RGBA(152,0,152, 1)',
+                borderWidth: 4,
+                fontSize: 50,
+                pointBackgroundColor: 'RGB(46,106,177)'
+            }]
+        },
+        options: {
+        title: {
+                display: true,
+                text: '感情分布',
+                fontSize:30,
+            },
+             //凡例の設定
+                    legend:{
+                   labels:{fontSize:20,
+                   }
+                    },
+            scale:{
+                 pointLabels: {
+                            fontSize: 25,
+                        },
+                ticks:{
+                    suggestedMin: 0,
+                    suggestedMax: 100,
+                    stepSize: 20,
+                    callback: function(value, index, values){
+                        return  value +  '％'
+                    }
+                }
+            }
+        }
+    });
+    </script>
+  <div class="cover2">
+  <p>.</p>
+  <p>.</p>
+  <p>.</p>
+  <h2 classs="blank3"></h2>
+   <h1>Analysis</h1> 
+   <h2 class="blank2"></h2>    
+    <p class="result">返信平均スパン・・・{{re31}}</p>
+    <p class="result">{{uname1}}さんの平均返信スパン・・・{{re32}}</p>
+    <p class="result">{{uname2}}さんの平均返信スパン・・・{{re33}}</p>
+    <p class="result">{{uname1}}さんの最大返信スパン・・・{{re34}}</p>
+    <p class="result">{{uname2}}さんの最大返信スパン・・・{{re35}}</p>
+    <p class="result">{{uname1}}さんの即レス回数・・・{{re36}}</p>
+    <p class="result">{{uname2}}さんの即レス回数・・・{{re37}}</p>
+    <p class="result">総メッセージ数・・・{{re38}}</p>
+    <p class="result">総通話時間・・・{{re39}}</p>
+  </div>
+{% endblock %}

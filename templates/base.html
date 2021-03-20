@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <title>{{title}}</title>
+    <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico">
+    <link rel="stylesheet" type="text/css"  href="/static/css/style.css">
+  </head>
+  <body>
+  <header>
+  <div class="nan">
+  <h1 class="headline">
+    <a class= "title">{{title}}　</a><div class="line-it-button" data-lang="ja" data-type="share-b" data-ver="3" data-url="https://linefortune.herokuapp.com/home2" data-color="default" data-size="small" data-count="true" style="display: none;"></div>
+  </h1>
+  <ul class="nav-list">
+    <li class="nav-list-item">
+      <a href="home1">友達診断</a>
+    </li>
+    <li class="nav-list-item"><a href="home2">恋人診断</a></li>
+    <li class="nav-list-item"><a href="home3">脈あり度診断</a></li>
+  </ul>
+  </div>
+</header>
+    <div>
+      {% block body %}
+      {% endblock %}
+    </div>
+  </body>
+</html>
+
