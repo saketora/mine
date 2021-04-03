@@ -162,14 +162,14 @@ def send1():
                y1=co.count(x[0])
                y2=co.count(x[1])
                z =an.analysis(file_name,x[2],x[3])
-               friend_keisu=int(z[5][:-1])/int(z[6][:-1])
-               if friend_keisu==0:
+               friend_keisu=int(z[5][:-1])/(int(z[6][:-1])+1)
+               if friend_keisu==0: #相手の即レスカウントと総メッセージ数の商が
                    friend_keisu=1
-               if y2[0]>400*friend_keisu:
+               if y2[0]>400*friend_keisu or float(z[0][:-1])<0: 
                   return render_template('result11.html',uname1=x[0],uname2=x[1], re11=y1[0], re12=y1[1], re13=y1[2], re14=y1[3], re15=y1[4], re16=y1[5], re17=y1[6], re18=y1[7], re21=y2[0], re22=y2[1], re23=y2[2], re24=y2[3], re25=y2[4], re26=y2[5], re27=y2[6], re28=y2[7], re31=z[0], re32=z[1], re33=z[2], re34=z[3], re35=z[4], re36=z[5], re37=z[6], re38=z[7], re39=z[8])
-               elif 401*friend_keisu>y2[0]>200*friend_keisu:
+               elif 401*friend_keisu>y2[0]>300*friend_keisu: 
                    return render_template('result12.html',uname1=x[0],uname2=x[1], re11=y1[0], re12=y1[1], re13=y1[2], re14=y1[3], re15=y1[4], re16=y1[5], re17=y1[6], re18=y1[7], re21=y2[0], re22=y2[1], re23=y2[2], re24=y2[3], re25=y2[4], re26=y2[5], re27=y2[6], re28=y2[7], re31=z[0], re32=z[1], re33=z[2], re34=z[3], re35=z[4], re36=z[5], re37=z[6], re38=z[7], re39=z[8])
-               elif 201*friend_keisu>y2[0]>100*friend_keisu:
+               elif 301*friend_keisu>y2[0]>200*friend_keisu: 
                    return render_template('result13.html',uname1=x[0],uname2=x[1], re11=y1[0], re12=y1[1], re13=y1[2], re14=y1[3], re15=y1[4], re16=y1[5], re17=y1[6], re18=y1[7], re21=y2[0], re22=y2[1], re23=y2[2], re24=y2[3], re25=y2[4], re26=y2[5], re27=y2[6], re28=y2[7], re31=z[0], re32=z[1], re33=z[2], re34=z[3], re35=z[4], re36=z[5], re37=z[6], re38=z[7], re39=z[8])
                else:
                    return render_template('result14.html',uname1=x[0],uname2=x[1], re11=y1[0], re12=y1[1], re13=y1[2], re14=y1[3], re15=y1[4], re16=y1[5], re17=y1[6], re18=y1[7], re21=y2[0], re22=y2[1], re23=y2[2], re24=y2[3], re25=y2[4], re26=y2[5], re27=y2[6], re28=y2[7], re31=z[0], re32=z[1], re33=z[2], re34=z[3], re35=z[4], re36=z[5], re37=z[6], re38=z[7], re39=z[8])

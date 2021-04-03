@@ -15,7 +15,7 @@ def split(txt_file):
     user1_except=t1.strip()
         
     f=open("./tmp/"+txt_file ,"r",encoding='utf-8-sig')
-        
+    
     tmp=f.readline()
         
     user1_tmp1=tmp.replace("[LINE]","")
@@ -25,9 +25,9 @@ def split(txt_file):
     user1=user1_tmp2[1:tm_usn]
         
     f1=open("./tmp/"+txt_file,"r",encoding='UTF-8')
-        
+
     
-        
+
     flag=0
     list_user1=[]
     list_user2=[]
@@ -53,7 +53,7 @@ def split(txt_file):
                         list_user2.append(tm_message)
         else:
             flag=1
-            
+    
     try:
         with open(path+"/"+user1+".csv","w",encoding='UTF-8') as f1:
             writer=csv.writer(f1)
@@ -90,3 +90,5 @@ def split(txt_file):
       
     
     return(a,b,user1,user2)
+
+

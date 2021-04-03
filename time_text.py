@@ -103,11 +103,12 @@ def make_time(data_line):
     year=year_catch(data_line)
     month=month_catch(data_line)
     day=day_catch(data_line)
-    time=str(year)+"/"+str(month)+"/"+str(day)
+    tmp=[year,month,day]
     if year!="" and month!="" and day!="":
-        return time
+        return tmp
     else:
         return ""
+
 
 #day_list.append(str(year)+"/"+str(month)+"/"+str(day))
 
@@ -213,6 +214,17 @@ def text_user(data_line):
         return tm_user
     else:
         return ""
+def text_catch(data_line):
+    list_strip=["[ファイル]","[スタンプ]","[写真]","[動画]","[通話]","[ボイスメッセージ]","\n"]
+    tmp=data_line.split("\t")
+    if len(tmp)==3:
+        tm_message=str(tmp[2])         
+        for s in list_strip:
+            strips=tm_message.replace(s,"") #ここでイランやつを消してんのね
+            tm_message=strips
+        return tm_message
+    else:
+        return ""
 
 
 
@@ -226,39 +238,18 @@ def analysis(txt_file,user1,user2):
     flag=0
     
 
-   
+    flag_talk_change=0
     flag=0
-    
-    list_tmp_time=["(",")","\n"]
-    list_weekday=["月","火","水","木","金","土","日"]
-
-    list_day=[]
-    listc_user1=["user1"]
-    listc_user2=["user2"]
-
-    listc_text=[list_day,listc_user1,listc_user2]
-
-    weekday="day"
-    tmp_weekday="day1"
-
-    listc_user1.append(0)
+    day_list_all=[]
 
     count_user1=0
     count_user2=0
 
-    weekday=""
-
-
-    list_df=[]
-    list_df1=[]
-
-    list_user1_day=[]
-    list_user2_day=[]
-    tmp_today=""
 
     
 
     f=open("./tmp/"+txt_file ,"r",encoding='utf-8-sig')
+    #f=open("C:/Users/hayat/OneDrive - Shizuoka University/プログラミングデータ/python/アプリ開発練習/txtfile保存場所/[LINE] 志方響（静岡大学 創理）🥺🥺🥺🌲とのトーク.txt","r",encoding='utf-8-sig')
     time_list=[]
     dict_day={}
     dicta={user1:0,user2:0}
@@ -280,6 +271,9 @@ def analysis(txt_file,user1,user2):
         data_line=f.readline()
             
         if data_line!="":
+            tm_message=text_catch(data_line)
+            if tm_message!="":
+                message_count+=1
             tm_user=text_user(data_line)
             hour=send_hour_catch(data_line)
             minuites=send_min_catch(data_line)
@@ -322,7 +316,8 @@ def analysis(txt_file,user1,user2):
                         
                     if len(day_list)==1:
                         flag_talk_change=1
-                        
+                
+                day_list_all.append(tmp_time)
                 del tmp_time[3:6]
     
             
@@ -364,87 +359,14 @@ def analysis(txt_file,user1,user2):
     result5=str(zero_list_user1.count(0))+"回" #user1即レス
     result6=str(zero_list_user2.count(0))+"回" #user2即レス
     result7=str(message_count)+"回" #総メッセージ数
-    result8=str(round(sum(time_list),1))+"時間" #通話時間全体
-    result9=tmp3[0]+"～"+tmp3[-1]+"の"+talk_span+"日中"+talk_day+"話している" #期間と会話実行日数を表示したい。
-=======
-    c=0
-    while flag!=1:             #txtfile内を探っている
-        data_line=f.readline()
-        
-            
-        if data_line!="":
-            tmp=data_line.split("\t")
-           
-            time=make_time(data_line)
-            call_time1=call_time(data_line)
-        
-            if str(call_time1)!="":
-                time_list.append(call_time1)
+    result8=str(round(sum(time_list),1))+"時間" #総通話時間
+    result9=tmp3[0]+"～"+tmp3[-1]+"の"+talk_span+"日中"+talk_day+"日話している" #期間と会話実行日数を表示したい。
 
-            if time!="":
-                day_list.append(time)
-                if len(day_list)%2==0 and len(day_list)!=0:
-                    spendtime=spend_days(day_list)
-                    #print(spendtime)
-                else:
-                    spendtime=0   
-
-            who1=send_who_catch(data_line)
-            hour=send_hour_catch(data_line)
-            minuites=send_min_catch(data_line)
-            if hour!="" and  minuites!="":
-                sum1=hour+minuites/60
-                #print(spendtime)
-            else:
-                sum1=0
-        
-                   
-            if who1==user1:             #即レス、反応時間の計算
-                d1={**dicta,user1:sum1}
-                dicta={**d1}
-                message_count+=1
-                if flag1==0:
-                    tmp1=dicta[user1]-dicta[user2]
-                    #print(tmp1)
-                    if tmp1>0:
-                        tmp1=float(tmp1/24)+float(spendtime)
-                    elif tmp1<0:
-                        tmp1=float(tmp1/24)-float(spendtime)
-                    elif tmp1==0 or tmp1==1:
-                        zero_list_user1.append(0)
-                    time_diff_all.append(round(tmp1,1))
-                    time_diff_user1.append(round(tmp1,3))            
-                flag1=1
-            elif who1==user2:
-                d2={**dicta,user2:sum1}
-                dicta={**d2}
-                message_count+=1
-                if flag1==1:
-                    tmp2=dicta[user1]-dicta[user2]
-                    #print(tmp2)
-                    if tmp2>0:
-                        tmp2=float(tmp2/24)+float(spendtime)
-                    elif tmp2<0:
-                        tmp2=float(tmp2/24)-float(spendtime)
-                    elif tmp2==0 or tmp2==1:
-                        zero_list_user2.append(0)
-                    time_diff_all.append(round(tmp2,1))
-                    time_diff_user2.append(round(tmp2,3))   
-                flag1=0
-        
-            #print(dicta)
-        else:
-            flag=1
-   
-    result1=str(round(float(statistics.mean(time_diff_all)),1))+"日"
-    result2=str(statistics.median(time_diff_all))+"日" #中央値と最頻値が等しい時良いかも？？ 
-    result3=str(statistics.mode(time_diff_all))+"日" #応答最頻
-    result4=str(round(-min(time_diff_all),1))+"日" #user1の応答時間最大値
-    result5=str(round(max(time_diff_all),1))+"日" #user2の応答時間最大値
-    result6=str(zero_list_user1.count(0))+"回" #user1即レス
-    result7=str(zero_list_user2.count(0))+"回" #user2即レス
-    result8=str(message_count)+"回" #総メッセージ数
-    result9=str(round(sum(time_list),1))+"時間" #通話時間全体
-
+ 
     return(result1,result2,result3,result4,result5,result6,result7,result8,result9)
-   
+"""
+txt_file="C:/Users/hayat/OneDrive - Shizuoka University/プログラミングデータ/python/アプリ開発練習/txtfile保存場所/[LINE] 志方響（静岡大学 創理）🥺🥺🥺🌲とのトーク.txt"
+user1="みっぴー(三輪羽哉人)（創理）"
+user2="志方響（静岡大学 創理）🥺🥺🥺🌲"
+print(analysis(txt_file,user1,user2))
+"""
