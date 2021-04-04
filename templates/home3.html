@@ -13,12 +13,33 @@
 </script>
 <div>
 <form method="post" action="/send3" enctype="multipart/form-data">
+  <h1>下記の質問に答えてください。答えなくても採点はされます。</h1>
+  <ul id="partner">
+    {% set q1_list =["友達","幼馴染","先輩","知人"] %}
+    <h2>あなたとの関係は何ですか？</h2>
+    {% for i in q1_list %}
+    <li class="q1"><input type="radio" id={{loop.index}} name="q1"  value="{{i}}"/><label for="{{loop.index}}" >{{i}}</label></li>
+    {% endfor %}
+    <h2>あなたと知り合ってから何年または何か月ですか？</h2>
+    <label><input type="text" name="q2_y" value=0>年<input type="text" name="q2_m" value=0>月</label>
+    <h2>あなたは相手との共通点はいくつありますか?</h2>
+    <label><input type="text" name="q3" value=0>個</label>
+    <h2>相手がどれくらいあなたに対して好感度を持っていると思いますか？</h2>
+    <select name="q4">
+      {% for k in range(100,-1,-25) %}
+      <option value="{{k}}">{{k}}%</option>
+      {% endfor %}
+    </select>
+  </ul>
+  
+
   <input type="file" id="txt_file" name="txt_file" class="submit">
   <h2 class="blank1"></h2>
   <input type="submit" value="診断" class="btn" onclick="btnClick(this)" />
 </form>
 </div>
 <h2 class="blank1"></h2>
- <script src="https://www.line-website.com/social-plugins/js/thirdparty/loader.min.js" async="async" defer="defer"></script>
+<script src="https://www.line-website.com/social-plugins/js/thirdparty/loader.min.js" async="async" defer="defer"></script>
+<script src="/static/javascripts/application.js" async="async" defer="defer"></script>
  <h2 class="blank1"></h2>
  {% endblock %} 

@@ -1,4 +1,53 @@
 {% extends "base.html" %}
 {% block body %}
- <h1>意中の相手の脈あり度は</h1>
- {% endblock %}
+<h1>あなたとパートナーの関係度は</h1>
+  <canvas id="myRaderChart"></canvas>
+  <!-- CDN -->
+　<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
+
+  <script>
+    var ctx = document.getElementById("myRaderChart");
+    var myRadarChart = new Chart(ctx, {
+        type: 'radar', 
+        data: { 
+            labels: ["喜び😆", "好き😍", "悲しみ😥", "恐怖😫", "怒り💢"],
+            datasets: [{
+                label: 'Aさん',
+                data: [92, 72, 86, 74, 86],
+                backgroundColor: 'RGBA(225,95,150, 0.5)',
+                borderColor: 'RGBA(225,95,150, 1)',
+                borderWidth: 1,
+                pointBackgroundColor: 'RGB(46,106,177)'
+            }, {
+                label: 'Bさん',
+                data: [73, 95, 80, 87, 79],
+                backgroundColor: 'RGBA(115,255,25, 0.5)',
+                borderColor: 'RGBA(115,255,25, 1)',
+                borderWidth: 1,
+                pointBackgroundColor: 'RGB(46,106,177)'
+            }]
+        },
+        options: {
+            
+            scale:{
+                ticks:{
+                    suggestedMin: 0,
+                    suggestedMax: 100,
+                    stepSize: 20,
+                    callback: function(value, index, values){
+                        return  value +  '％'
+                    }
+                }
+            }
+        }
+    });
+    </script>
+
+{{q1}}
+{{q2}}
+{{q2_y}}
+{{q2_m}}
+{{q3}}
+{{q4}}
+{% endblock %}
+

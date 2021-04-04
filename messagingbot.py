@@ -180,27 +180,37 @@ def send1():
 
 @app.route('/send2', methods=['GET', 'POST'])
 def send2():
-    if request.method == 'POST':
-        txt_file = request.files['txt_file']
-        if txt_file and allowed_file(txt_file.filename):
-            filename2 = txt_file.filename
-            return render_template('result21.html', f2=filename2)
+        if request.method == 'POST':
+            txt_file = request.files['txt_file']
+            if txt_file and allowed_file(txt_file.filename):
+                file_name = secure_filename(txt_file.filename)
+                txt_file.save(os.path.join(app.config['UPLOAD_FOLDER'], file_name))
+
+                return render_template('result21.html')
+            else:
+                return ''' <p>許可されていない拡張子です</p> '''
         else:
-            return ''' <p>許可されていない拡張子です</p> '''
-    else:
-        return redirect(url_for('home1'))
+            return redirect(url_for('home2'))
 
 @app.route('/send3', methods=['GET', 'POST'])
 def send3():
-    if request.method == 'POST':
-        txt_file = request.files['txt_file']
-        if txt_file and allowed_file(txt_file.filename):
-            filename3 = txt_file.filename
-            return render_template('result31.html', f3=filename3)
+        if request.method == 'POST':
+            txt_file = request.files['txt_file']
+            if txt_file and allowed_file(txt_file.filename):
+                file_name = secure_filename(txt_file.filename)
+                txt_file.save(os.path.join(app.config['UPLOAD_FOLDER'], file_name))
+                q1=request.form["q1"] #関係は何か？
+                q2_y=request.form["q2_y"] #関係年
+                q2_m=request.form["q2_m"] #関係月
+                q3=request.form["q3"] #共通点個数
+                q4=request.form["q4"] #自分が思う好感度
+                return render_template('result31.html',q1=q1,q2_y=q2_y,q2_m=q2_m,q3=q3,q4=q4)
+            else:
+                return ''' <p>許可されていない拡張子です</p> '''
         else:
-            return ''' <p>許可されていない拡張子です</p> '''
-    else:
-        return redirect(url_for('home1'))
+            return redirect(url_for('home3'))
+
+
 
 if __name__ == "__main__":
 #    app.run()
