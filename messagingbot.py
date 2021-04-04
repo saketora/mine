@@ -29,6 +29,7 @@ handler = WebhookHandler(YOUR_CHANNEL_SECRET)
 
 @app.route("/callback", methods=['POST'])
 def callback():
+    
     # get X-Line-Signature header value
     signature = request.headers['X-Line-Signature']
 
@@ -185,8 +186,13 @@ def send2():
             if txt_file and allowed_file(txt_file.filename):
                 file_name = secure_filename(txt_file.filename)
                 txt_file.save(os.path.join(app.config['UPLOAD_FOLDER'], file_name))
-
-                return render_template('result21.html')
+                q1_y=request.form["q1_y"] #記念日:年
+                q1_m=request.form["q1_m"] #記念日:月
+                q1_d=request.form["q1_d"] #記念日:日
+                q2=request.form["q2"] #関係性どのくらい
+                q3=request.form["q3"] #あなたが何を求めているか
+                q4=request.form["q4"] #相手が何を求めているかを考えた
+                return render_template('result21.html',q1_y=q1_y,q1_m=q1_m,q1_d=q1_d,q2=q2,q3=q3,q4=q4)
             else:
                 return ''' <p>許可されていない拡張子です</p> '''
         else:

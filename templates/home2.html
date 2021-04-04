@@ -5,15 +5,41 @@
 <p>診断したいトークテキストファイルを準備して下のフォームから選んでね。</p>
 {% include "ex.html" %}
 <div id="lo"><img src="/static/images/tmp.gif"></div>
+
 <script type="text/javascript">
     function btnClick(obj){
       var img = document.getElementById('lo');  
       img.style.display = "block";
-    }
+    }  　
 </script>
+
+
+
 <div>
 <form method="post" action="/send2" enctype="multipart/form-data">
-
+  <h1>下記の質問に答えてください。答えなくても採点はされます。</h1>
+  <ul id="partner">
+      <h2>付き合った記念日はいつですか？</h2>
+      <label>
+        <input type="number" name="q1_y" value=2019 min="2000" minlength="4" maxlength="4">年
+        <input type="number" name="q1_m" value=1 max="12" min="1" maxlength="2">月
+        <input type="number" name="q1_d" value=1 max="31" min="1" maxlength="2">日
+      </label>
+      <h2>現在関係はどれくらい良いと思いますか？</h2>
+      <select name="q2">
+        {% for k in range(100,-101,-25) %}
+          <option value="{{k}}">{{k}}%</option>
+        {% endfor %}
+      </select>
+      <h2>あなたは相手に何を求めていますか？</h2>
+      <input type="text" name="q3"> 
+      <h2>相手はあなたに何を求めてると思いますか？</h2>
+      <input type="text" name="q4">
+      
+     
+  </ul>
+  
+  
   <input type="file" id="txt_file" name="txt_file" class="submit">
   <h2 class="blank1"></h2>
   <input type="submit" value="診断" class="btn" onclick="btnClick(this)" />
