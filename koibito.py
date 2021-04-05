@@ -1,8 +1,27 @@
-import statistics
-import datetime
 import pandas as pd
+import datetime
+import statistics
 
-#make_time call_time spend_days send_who_catch send_hour_catch send_min_catch
+
+
+def text_user(data_line):
+    tmp=data_line.split("\t")
+    if len(tmp)==3:       
+        tm_user=tmp[1]
+        return tm_user
+    else:
+        return ""
+def text_catch(data_line):
+    list_strip=["\n"]
+    tmp=data_line.split("\t")
+    if len(tmp)==3:
+        tm_message=str(tmp[2])         
+        for s in list_strip:
+            strips=tm_message.replace(s,"") #ここでイランやつを消してんのね
+            tm_message=strips
+        return tm_message
+    else:
+        return ""
 
 def time_catch(data_line):
     list_day=["月","火","水","木","金","土","日"]
@@ -43,6 +62,17 @@ def day_catch(data_line):
     else:
         return ""
 
+
+def make_time(data_line):
+    year=year_catch(data_line)
+    month=month_catch(data_line)
+    day=day_catch(data_line)
+    tmp=[year,month,day]
+    if year!="" and month!="" and day!="":
+        return tmp
+    else:
+        return ""
+
 def send_hour_catch(data_line):
     tmp1=data_line.split("\t")
     if len(tmp1)==3:
@@ -78,73 +108,6 @@ def send_who_catch(data_line):
     else:
         return ""
 
-
-def isLeapYear(year,month):
-    if month==2 and year%4==0 and (year%100!=0 or year%400==0):
-        return 29
-    else:
-        return 28
-
-def lastday_cal(year,month,day):
-    month_judge_31=[1,3,5,7,8,10,12]
-    month_judge_30=[4,6,9,11]
-
-    if year!="" and month!="" and day!="":
-        if month in month_judge_31:
-            lastday=31
-        elif month in month_judge_30:
-            lastday=30
-        elif month==2:
-            lastday=isLeapYear(year,month)
-        return lastday
-    else:
-        return ""
-
-def make_time(data_line):
-    year=year_catch(data_line)
-    month=month_catch(data_line)
-    day=day_catch(data_line)
-    tmp=[year,month,day]
-    if year!="" and month!="" and day!="":
-        return tmp
-    else:
-        return ""
-
-
-#day_list.append(str(year)+"/"+str(month)+"/"+str(day))
-
-def make_1week_tmp(day_list):
-    tmp_1week_list=[]
-    tmp_day=day_list[-1]
-    tmp_day_list=tmp_day.split("/")
-    tmp_year=int(tmp_day_list[0])
-    tmp_month=int(tmp_day_list[1])
-    tmp_day=int(tmp_day_list[2])
-    lastday=lastday_cal(tmp_year,tmp_month,tmp_day)
-    flag=0
-    for i in range(7):
-        tmp_day+=1
-
-        if lastday<tmp_day:
-            if flag==0:
-                tmp_month+=1
-                flag=1
-            if tmp_month==13:
-                tmp_month=1
-                tmp_year+=1
-            tmp_1week_list.append(str(tmp_year)+"/"+str(tmp_month)+"/"+str(tmp_day-lastday))
-        else:
-            tmp_1week_list.append(str(tmp_year)+"/"+str(tmp_month)+"/"+str(tmp_day))
-
-    return tmp_1week_list
-
-
-def make_1week(data_line,tmp_1week_list,week_list):
-    time=make_time(data_line)
-    if time in tmp_1week_list and time!="":
-        week_list.append(time)
-        return week_list
-
 def call_time(data_line):
     tmp=data_line.split("\t")
     if len(tmp)==3 and "通話時間" in tmp[2]:
@@ -166,96 +129,30 @@ def call_time(data_line):
         return time_sum
     else:
         return ""
-
-def spend_days(day_list):
-    if len(day_list)%2==0 and len(day_list)!=0:
-        day_list1=day_list[-2].split("/")
-        year1=int(day_list1[0])
-        month1=int(day_list1[1])
-        day1=int(day_list1[2])    
-            
-        day_list2=day_list[-1].split("/")
-        year2=int(day_list2[0])
-        month2=int(day_list2[1])
-        day2=int(day_list2[2])
-
-    lastday_start=lastday_cal(year1,month1,day1)
-    sum_start=lastday_start-day1+1
-    lastday_end=day2
-    sum_end=lastday_end-day2+1
-
-    list_sum_day=[]
-    c=0
-    if year1!=year2:
-        tmp_year=year1
-        tmp_month=month1
-        while tmp_year!=year2 and c!=300:
-            for a in range(tmp_month,12+1,1):
-                tmp_lastday1=lastday_cal(tmp_year,a,1)
-                list_sum_day.append(tmp_lastday1)
-                if a==12:
-                    tmp_year+=1
-                    tmp_month=1
-            c+=1
-
-    elif year1==year2:
-        for k in range(month1,month2,1):
-            tmp_lastday2=lastday_cal(year1,k,1)
-            list_sum_day.append(tmp_lastday2)
-    
-    sum_day=sum_start+sum(list_sum_day)+sum_end
-    
-    return sum_day
-
-
-def text_user(data_line):
-    tmp=data_line.split("\t")
-    if len(tmp)==3:       
-        tm_user=tmp[1]
-        return tm_user
-    else:
-        return ""
-def text_catch(data_line):
-    list_strip=["[ファイル]","[スタンプ]","[写真]","[動画]","[通話]","[ボイスメッセージ]","\n"]
-    tmp=data_line.split("\t")
-    if len(tmp)==3:
-        tm_message=str(tmp[2])         
-        for s in list_strip:
-            strips=tm_message.replace(s,"") #ここでイランやつを消してんのね
-            tm_message=strips
-        return tm_message
-    else:
-        return ""
-
-
-
-
-
+"""
+q1_y=int(request.form["q1_y"]) #記念日:年
+q1_m=int(request.form["q1_m"]) #記念日:月
+q1_d=int(request.form["q1_d"]) #記念日:日
+q2=request.form["q2"] #関係性どのくらい
+q3=request.form["q3"] #あなたが何を求めているか
+q4=request.form["q4"] #相手が何を求めているかを考えた
+koibito_list=[[q1_y,q1_m,q1_d],q2,q3,q4]
+"""
         
-def analysis(txt_file,user1,user2):
+def sub_analysis_koibito(txt_file,user1,user2):
 
     dt_1=0
     dt_2=0
     flag=0
-    
-
     flag_talk_change=0
     flag=0
     day_list_all=[]
 
-    count_user1=0
-    count_user2=0
-
-
-    
-
-    f=open("./tmp/"+txt_file ,"r",encoding='utf-8-sig')
-    #f=open("C:/Users/hayat/OneDrive - Shizuoka University/プログラミングデータ/python/アプリ開発練習/txtfile保存場所/[LINE] 志方響（静岡大学 創理）🥺🥺🥺🌲とのトーク.txt","r",encoding='utf-8-sig')
+    #f=open("./tmp/"+txt_file ,"r",encoding='utf-8-sig')
+    f=open("C:/Users/hayat/OneDrive - Shizuoka University/プログラミングデータ/python/アプリ開発練習/txtfile保存場所/[LINE] 浅野秀光（ひでみつ）（創理　物理）とのトーク.txt","r",encoding='utf-8-sig')
     time_list=[]
-
-    time_diff_all=[]
-    message_count=0
     day_list=[]
+
     list_columns=["time","diff_time","message","which_user"]
     df=pd.DataFrame(columns=list_columns)
 
@@ -266,8 +163,6 @@ def analysis(txt_file,user1,user2):
             
         if data_line!="":
             tm_message=text_catch(data_line)
-            if tm_message!="":
-                message_count+=1
             tm_user=text_user(data_line)
             hour=send_hour_catch(data_line)
             minuites=send_min_catch(data_line)
@@ -326,6 +221,30 @@ def analysis(txt_file,user1,user2):
         else:
             flag=1
     
+
+
+    return(day_list,df,round(sum(time_list),1))
+"""
+txt_file="C:/Users/hayat/OneDrive - Shizuoka University/プログラミングデータ/python/アプリ開発練習/txtfile保存場所/[LINE] 浅野秀光（ひでみつ）（創理　物理）とのトーク.txt"
+user1="みっぴー(三輪羽哉人)（創理）"
+user2="浅野秀光（ひでみつ）（創理　物理）"
+print(sub_analysis_koibito(txt_file,user1,user2))
+"""
+def analysis_koibito(txt_file,user1,user2,koibito_list):
+    year=koibito_list[0][0] #記念日:年
+    month=koibito_list[0][1] #記念日:月
+    day=koibito_list[0][2] #記念日:日
+    relation=koibito_list[1] #関係性どのくらい
+    hope_to=koibito_list[2] #あなたが何を求めているか
+    hope_from=koibito_list[3] #相手が何を求めているかを考えた
+    
+    
+    list_sub=sub_analysis_koibito(txt_file,user1,user2)
+    day_list=list_sub[0]
+    df=list_sub[1]
+    call_time1=list_sub[2]
+    
+    
     talk_span=str((df.at[df.index[-1],"time"]-df.at[df.index[0],"time"]).days)
     
     tmp=[[str(day_list[i][j]) for j in range(3)] for i in range(len(day_list))]
@@ -353,20 +272,50 @@ def analysis(txt_file,user1,user2):
     zero_user1=len(user1_t[user1_t["diff_time"]==0])
     zero_user2=len(user2_t[user2_t["diff_time"]==0])
     
+    
+    
     result1=str(round(float(statistics.mean(time_diff_all)),1))+"日"#平均返信時間二人とも、大幅にずれていなければよいかも？。
     result2=str(statistics.median(time_diff_all))+"日" #中央値がマイナスならuser1に傾いていて、user2はプラスに傾いている場合。？ 
     result3=str(statistics.mode(time_diff_all))+"日" #応答最頻
     result4=str(reply_time_max)+"日" #user1とuser2の応答時間最大値
     result5=str(zero_user1)+"回" #user1即レス
     result6=str(zero_user2)+"回" #user2即レス
-    result7=str(message_count)+"回" #総メッセージ数
-    result8=str(round(sum(time_list),1))+"時間" #総通話時間
+    result7=str(len(df))+"回" #総メッセージ数
+    result8=str(call_time1)+"時間" #総通話時間
     result9=tmp3[0]+"～"+tmp3[-1]+"の"+talk_span+"日中"+talk_day+"日話している" #期間と会話実行日数を表示したい。
+    tmp_date=datetime.datetime(year,month,day)
+    
+    
+    #付き合った前と付き合ったあとの変化を表現する。
+    #連絡頻度、電話総合時間、
+    #以下の計算により、付き合った後の上昇を見る。
+    before=(tmp_date-df.at[df.index[0],"time"]).days #付き合う前の日数を計算
+    after=1+(df.at[df.index[-1],"time"]-tmp_date).days #付き合った後の日数を計算
+    
+    b_df=df[df["time"]<tmp_date]
+    
+    
+    a_df=df[(df["time"]>=tmp_date) & (df["which_user"]==user1)]
+    
+    return (result1,result2,result3,result4,result5,result6,result7,result8,result9,before,after,df.info(),b_df,a_df)
 
-    return(result1,result2,result3,result4,result5,result6,result7,result8,result9)
-"""
-txt_file="C:/Users/hayat/OneDrive - Shizuoka University/プログラミングデータ/python/アプリ開発練習/txtfile保存場所/[LINE] 志方響（静岡大学 創理）🥺🥺🥺🌲とのトーク.txt"
+
+txt_file="C:/Users/hayat/OneDrive - Shizuoka University/プログラミングデータ/python/アプリ開発練習/txtfile保存場所/[LINE] 浅野秀光（ひでみつ）（創理　物理）とのトーク.txt"
 user1="みっぴー(三輪羽哉人)（創理）"
-user2="志方響（静岡大学 創理）🥺🥺🥺🌲"
-print(analysis(txt_file,user1,user2))
-"""
+user2="浅野秀光（ひでみつ）（創理　物理）"
+q1_y=2020 #記念日:年
+q1_m=7 #記念日:月
+q1_d=19 #記念日:日
+q2=100 #関係性どのくらい
+q3="愛情" #あなたが何を求めているか
+q4="愛情" #相手が何を求めているかを考えた
+koibito_list=[[q1_y,q1_m,q1_d],q2,q3,q4]
+
+print(analysis_koibito(txt_file,user1,user2,koibito_list))
+
+
+
+
+
+
+

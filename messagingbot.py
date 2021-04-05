@@ -152,7 +152,7 @@ def allowed_file(filename):
         filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
 
-@app.route('/send1', methods=['GET', 'POST'])
+@app.route('/send1', methods=['GET', 'POST']) #友達診断結果
 def send1():
     if request.method == 'POST':
         txt_file = request.files['txt_file']
@@ -179,26 +179,28 @@ def send1():
     else:
         return redirect(url_for('home1'))
 
-@app.route('/send2', methods=['GET', 'POST'])
+@app.route('/send2', methods=['GET', 'POST']) #恋人診断
 def send2():
         if request.method == 'POST':
             txt_file = request.files['txt_file']
             if txt_file and allowed_file(txt_file.filename):
                 file_name = secure_filename(txt_file.filename)
                 txt_file.save(os.path.join(app.config['UPLOAD_FOLDER'], file_name))
-                q1_y=request.form["q1_y"] #記念日:年
-                q1_m=request.form["q1_m"] #記念日:月
-                q1_d=request.form["q1_d"] #記念日:日
+                q1_y=int(request.form["q1_y"]) #記念日:年
+                q1_m=int(request.form["q1_m"]) #記念日:月
+                q1_d=int(request.form["q1_d"]) #記念日:日
                 q2=request.form["q2"] #関係性どのくらい
                 q3=request.form["q3"] #あなたが何を求めているか
                 q4=request.form["q4"] #相手が何を求めているかを考えた
+                koibito_list=[[q1_y,q1_m,q1_d],q2,q3,q4]
+                
                 return render_template('result21.html',q1_y=q1_y,q1_m=q1_m,q1_d=q1_d,q2=q2,q3=q3,q4=q4)
             else:
                 return ''' <p>許可されていない拡張子です</p> '''
         else:
             return redirect(url_for('home2'))
 
-@app.route('/send3', methods=['GET', 'POST'])
+@app.route('/send3', methods=['GET', 'POST']) #脈あり診断
 def send3():
         if request.method == 'POST':
             txt_file = request.files['txt_file']
@@ -206,10 +208,12 @@ def send3():
                 file_name = secure_filename(txt_file.filename)
                 txt_file.save(os.path.join(app.config['UPLOAD_FOLDER'], file_name))
                 q1=request.form["q1"] #関係は何か？
-                q2_y=request.form["q2_y"] #関係年
-                q2_m=request.form["q2_m"] #関係月
-                q3=request.form["q3"] #共通点個数
-                q4=request.form["q4"] #自分が思う好感度
+                q2_y=int(request.form["q2_y"]) #関係年
+                q2_m=int(request.form["q2_m"]) #関係月
+                q3=int(request.form["q3"]) #共通点個数
+                q4=int(request.form["q4"]) #自分が思う好感度
+                myakuari_list=[q1,[q2_y,q2_m],q3,q4]
+                
                 return render_template('result31.html',q1=q1,q2_y=q2_y,q2_m=q2_m,q3=q3,q4=q4)
             else:
                 return ''' <p>許可されていない拡張子です</p> '''

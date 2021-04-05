@@ -126,5 +126,11 @@ color: white;
        top: 0;
        left: 0;
        cursor: zoom-out;
-        }
+    }
 
+ ul.partner { width: 40%;
+      margin: 2em auto;
+      border: 1px solid white;
+      border-radius: 3px;
+      background: #5e90c9;
+        }

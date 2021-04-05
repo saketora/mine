@@ -14,13 +14,13 @@
 <div>
 <form method="post" action="/send3" enctype="multipart/form-data">
   <h1>下記の質問に答えてください。答えなくても採点はされます。</h1>
-  <ul id="partner">
+  <ul class="partner">
     {% set q1_list =["友達","幼馴染","先輩","知人"] %}
     <h2>あなたとの関係は何ですか？</h2>
     {% for i in q1_list %}
-      <li li class="q1"><input type="radio" id={{loop.index}} name="q1"  value="{{i}}"/><label for="{{loop.index}}" >{{i}}</label></li>
+      <input type="radio" id={{loop.index}} name="q1"  value="{{i}}"/><label for="{{loop.index}}" >{{i}}</label>
     {% endfor %}
-    <h2>あなたと知り合ってから何年または何か月ですか？</h2>
+    <h2>あなたと知り合ってから何年何か月ですか？</h2>
     <label>
       <input type="number" name="q2_y" value=0>年
       <input type="number" name="q2_m" value=0 max="12" min="0" maxlength="2">月
