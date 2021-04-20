@@ -2,8 +2,6 @@ import pandas as pd
 import datetime
 import statistics
 
-
-
 def text_user(data_line):
     tmp=data_line.split("\t")
     if len(tmp)==3:       
@@ -149,15 +147,17 @@ def sub_analysis_koibito(txt_file,user1,user2):
     day_list_all=[]
 
     #f=open("./tmp/"+txt_file ,"r",encoding='utf-8-sig')
-    f=open("C:/Users/hayat/OneDrive - Shizuoka University/プログラミングデータ/python/アプリ開発練習/txtfile保存場所/[LINE] 浅野秀光（ひでみつ）（創理　物理）とのトーク.txt","r",encoding='utf-8-sig')
+    f=open(txt_file,"r",encoding='utf-8-sig')
     time_list=[]
     day_list=[]
 
     list_columns=["time","diff_time","message","which_user"]
     df=pd.DataFrame(columns=list_columns)
-
+    user1_count=0
+    user2_count=0
 
     tmp_time=[]
+    c=0
     while flag!=1:             #txtfile内を探っている
         data_line=f.readline()
             
@@ -167,12 +167,14 @@ def sub_analysis_koibito(txt_file,user1,user2):
             hour=send_hour_catch(data_line)
             minuites=send_min_catch(data_line)
             time=make_time(data_line)
+            if tm_message!="":
+                c+=1
             if time=="" and hour!="" and minuites!="":
                 tmp_time.append(hour)
                 tmp_time.append(minuites)
                 tmp_time.append(0)
                 day_list.append(tmp_time)
-
+                
                 if user1==tm_user:
 
                     if len(day_list)==1:
@@ -189,6 +191,8 @@ def sub_analysis_koibito(txt_file,user1,user2):
                             df= df.append( tmp_se, ignore_index=True )
                             flag_talk_change=0            
                 else:
+                    
+
                     if flag_talk_change==0:
                         dt_2=datetime.datetime(day_list[-1][0],day_list[-1][1],day_list[-1][2],day_list[-1][3],day_list[-1][4],day_list[-1][5])
                         if type(dt_1) is datetime.datetime and type(dt_2) is datetime.datetime:
@@ -223,7 +227,7 @@ def sub_analysis_koibito(txt_file,user1,user2):
     
 
 
-    return(day_list,df,round(sum(time_list),1))
+    return(day_list,df,round(sum(time_list),1),c)
 """
 txt_file="C:/Users/hayat/OneDrive - Shizuoka University/プログラミングデータ/python/アプリ開発練習/txtfile保存場所/[LINE] 浅野秀光（ひでみつ）（創理　物理）とのトーク.txt"
 user1="みっぴー(三輪羽哉人)（創理）"
@@ -253,7 +257,7 @@ def analysis_koibito(txt_file,user1,user2,koibito_list):
     tmp3=list(sorted(set(tmp2)))
     talk_day=str(len(tmp3))
     
-    
+    """
     time_diff_all=df["diff_time"].values.tolist()    
     
     list_day_user1=list(filter(lambda x:x<0 ,time_diff_all))
@@ -266,23 +270,11 @@ def analysis_koibito(txt_file,user1,user2,koibito_list):
         reply_time_max=user1_reply
     else:
         reply_time_max=user2_reply
-    
-    user1_t=df[df["which_user"]==user1]
-    user2_t=df[df["which_user"]==user2]
-    zero_user1=len(user1_t[user1_t["diff_time"]==0])
-    zero_user2=len(user2_t[user2_t["diff_time"]==0])
-    
-    
-    
-    result1=str(round(float(statistics.mean(time_diff_all)),1))+"日"#平均返信時間二人とも、大幅にずれていなければよいかも？。
-    result2=str(statistics.median(time_diff_all))+"日" #中央値がマイナスならuser1に傾いていて、user2はプラスに傾いている場合。？ 
-    result3=str(statistics.mode(time_diff_all))+"日" #応答最頻
-    result4=str(reply_time_max)+"日" #user1とuser2の応答時間最大値
-    result5=str(zero_user1)+"回" #user1即レス
-    result6=str(zero_user2)+"回" #user2即レス
-    result7=str(len(df))+"回" #総メッセージ数
-    result8=str(call_time1)+"時間" #総通話時間
-    result9=tmp3[0]+"～"+tmp3[-1]+"の"+talk_span+"日中"+talk_day+"日話している" #期間と会話実行日数を表示したい。
+    """
+    #user1_t=df[]
+    #user2_t=df[df["which_user"]==user2]
+    #zero_user1=len(df[(df["diff_time"]==0) & (df["which_user"]==user1)])
+    #zero_user2=len(df[(df["diff_time"]==0) & (df["which_user"]==user2)])
     tmp_date=datetime.datetime(year,month,day)
     
     
@@ -291,18 +283,37 @@ def analysis_koibito(txt_file,user1,user2,koibito_list):
     #以下の計算により、付き合った後の上昇を見る。
     before=(tmp_date-df.at[df.index[0],"time"]).days #付き合う前の日数を計算
     after=1+(df.at[df.index[-1],"time"]-tmp_date).days #付き合った後の日数を計算
+    b_df=df[(df["time"]<tmp_date) ]
+    a_df=df[(df["time"]>=tmp_date)]
+    """
+    b_df_user1=df[(df["time"]<tmp_date) & (df["which_user"]==user1) ] #user1の付き合う前の情報
+    b_df_user2=df[(df["time"]<tmp_date) & (df["which_user"]==user2) ] #user2の付き合う前の情報
     
-    b_df=df[df["time"]<tmp_date]
+    a_df_user1=df[(df["time"]>=tmp_date) & (df["which_user"]==user1)] #user1の付き合った後の情報
+    a_df_user2=df[(df["time"]>=tmp_date) & (df["which_user"]==user2)] #user2の付き合った後の情報
+    """
+    zero_b=df[(df["time"]<tmp_date) & (df["diff_time"]==0)]
+    zero_a=df[(df["time"]>=tmp_date) & (df["diff_time"]==0)]
     
+    result1=str(int(b_df.shape[0]))+"日"  #会話実行日数 付き合う前
+    result2=str(int(a_df.shape[0]))+"日"  #会話実行日数　付き合う後
+    result3=str(int(b_df.shape[0]/before))+"回" #一日あたり平均LINE回数　付き合う前
+    result4=str(int(a_df.shape[0]/after))+"回" #一日あたり平均LINE回数　付き合った後
+    result5=str(int(zero_b.shape[0]/before))+"回" #即レスお互い 付き合う前
+    result6=str(int(zero_a.shape[0]/after))+"回" #即レスお互い　付き合った後
+    result7=str(list_sub[3])+"回" #総メッセージ数
+    result8=str(call_time1)+"時間" #総通話時間
+    result9=tmp3[0]+"～"+tmp3[-1]+"の"+talk_span+"日中"+talk_day+"日話している。"
     
-    a_df=df[(df["time"]>=tmp_date) & (df["which_user"]==user1)]
-    
-    return (result1,result2,result3,result4,result5,result6,result7,result8,result9,before,after,df.info(),b_df,a_df)
+
+    return (result1,result2,result3,result4,result5,result6,result7,result8,result9)
 
 
-txt_file="C:/Users/hayat/OneDrive - Shizuoka University/プログラミングデータ/python/アプリ開発練習/txtfile保存場所/[LINE] 浅野秀光（ひでみつ）（創理　物理）とのトーク.txt"
+
+
+txt_file="C:/Users/hayat/OneDrive - Shizuoka University/プログラミングデータ/python/アプリ開発練習/txtfile保存場所/[LINE] あさ ばなな(創理生物)（なな）8_17とのトーク.txt"
 user1="みっぴー(三輪羽哉人)（創理）"
-user2="浅野秀光（ひでみつ）（創理　物理）"
+user2="あさ ばなな(創理生物)（なな）8_17"
 q1_y=2020 #記念日:年
 q1_m=7 #記念日:月
 q1_d=19 #記念日:日
